@@ -277,7 +277,7 @@ export function PayrollCard({ periodId, index }: Props) {
               {isEncrypting || isSubmitting || isSubmitConfirming ? (
                 <div className="space-y-3">
                   <p className="text-xs text-emerald-300 font-medium">Encrypting your salary…</p>
-                  <EncryptionSteps steps={steps} />
+                  <EncryptionSteps steps={steps} isEncrypting={isEncrypting} />
                   {(isSubmitting || isSubmitConfirming) && (
                     <div className="flex items-center gap-2 text-xs text-slate-400">
                       <Loader2 size={11} className="animate-spin" />
