@@ -4,10 +4,12 @@ export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, ExternalLink, Send, FileText, ShieldCheck, ShieldAlert } from "lucide-react";
+import { Plus, ExternalLink, Send, FileText, ShieldCheck, ShieldAlert, Radio, DollarSign } from "lucide-react";
 import { useAccount } from "wagmi";
 import { useRequestCount } from "../hooks/useRequest";
 import { useRoundCount } from "../hooks/useBlindReview";
+import { useVoteProposalCount } from "../hooks/useSealedVote";
+import { usePayrollPeriodCount } from "../hooks/useConfidentialPayroll";
 import { useIsVerified } from "../hooks/useIdentityGate";
 import { RequestCard } from "../components/RequestCard";
 import dynamicImport from "next/dynamic";
@@ -38,22 +40,48 @@ const KYCModal = dynamicImport(
   () => import("../components/KYCModal").then(mod => mod.KYCModal),
   { ssr: false }
 );
+const VoteCard = dynamicImport(
+  () => import("../components/VoteCard").then(mod => mod.VoteCard),
+  { ssr: false }
+);
+const CreateProposalModal = dynamicImport(
+  () => import("../components/CreateProposalModal").then(mod => mod.CreateProposalModal),
+  { ssr: false }
+);
+const PayrollCard = dynamicImport(
+  () => import("../components/PayrollCard").then(mod => mod.PayrollCard),
+  { ssr: false }
+);
+const CreatePayrollModal = dynamicImport(
+  () => import("../components/CreatePayrollModal").then(mod => mod.CreatePayrollModal),
+  { ssr: false }
+);
 
 export default function Home() {
   const { isConnected, address } = useAccount();
   const { data: count, refetch } = useRequestCount();
   const { data: roundCount, refetch: refetchRounds } = useRoundCount();
-  const { data: isVerified, refetch: refetchVerified } = useIsVerified(address);
-  const [showCreate,      setShowCreate]      = useState(false);
-  const [showSendPayment, setShowSendPayment] = useState(false);
-  const [showCreateRound, setShowCreateRound] = useState(false);
-  const [showKYC,         setShowKYC]         = useState(false);
+  const { data: voteCount, refetch: refetchVotes }       = useVoteProposalCount();
+  const { data: payrollCount, refetch: refetchPayroll }  = usePayrollPeriodCount();
+  const { data: isVerified, refetch: refetchVerified }   = useIsVerified(address);
+  const [showCreate,          setShowCreate]          = useState(false);
+  const [showSendPayment,     setShowSendPayment]     = useState(false);
+  const [showCreateRound,     setShowCreateRound]     = useState(false);
+  const [showKYC,             setShowKYC]             = useState(false);
+  const [showCreateProposal,  setShowCreateProposal]  = useState(false);
+  const [showCreatePayroll,   setShowCreatePayroll]   = useState(false);
 
   const requestIds = count
     ? Array.from({ length: Number(count) }, (_, i) => BigInt(i)).reverse()
     : [];
   const roundIds = roundCount
     ? Array.from({ length: Number(roundCount) }, (_, i) => BigInt(i)).reverse()
+    : [];
+  const voteIds = voteCount
+    ? Array.from({ length: Number(voteCount) }, (_, i) => BigInt(i)).reverse()
+    : [];
+  const payrollIds = payrollCount
+    ? Array.from({ length: Number(payrollCount) }, (_, i) => BigInt(i)).reverse()
     : [];
 
   return (
@@ -255,6 +283,88 @@ export default function Home() {
           )}
         </section>
 
+        {/* DAO Voting */}
+        <section className="mt-16">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-white">DAO Voting</h2>
+              <p className="text-sm text-slate-500 mt-0.5">
+                {voteIds.length} proposal{voteIds.length !== 1 ? "s" : ""} · ballots FHE-encrypted · tally revealed on-chain
+              </p>
+            </div>
+            {isConnected && (
+              <button onClick={() => setShowCreateProposal(true)} className="btn-primary flex items-center gap-2">
+                <Plus size={15} /> New Proposal
+              </button>
+            )}
+          </div>
+
+          {voteIds.length === 0 ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card text-center py-20">
+              <div className="text-4xl mb-4">🗳️</div>
+              <p className="text-lg font-semibold text-slate-300 mb-2">No proposals yet</p>
+              <p className="text-sm text-slate-500 mb-6">
+                Create a DAO proposal — votes accumulate homomorphically, result revealed on-chain via{" "}
+                <span className="text-violet-400 font-mono text-xs">FHE.decrypt</span>.
+              </p>
+              {isConnected ? (
+                <button onClick={() => setShowCreateProposal(true)} className="btn-primary inline-flex items-center gap-2">
+                  <Radio size={15} /> Create First Proposal
+                </button>
+              ) : (
+                <p className="text-sm text-slate-600">Connect your wallet to get started.</p>
+              )}
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {voteIds.map((id, i) => (
+                <VoteCard key={id.toString()} proposalId={id} index={i} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Pay Equity */}
+        <section className="mt-16">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-white">Pay Equity Engine</h2>
+              <p className="text-sm text-slate-500 mt-0.5">
+                {payrollIds.length} period{payrollIds.length !== 1 ? "s" : ""} · salaries FHE-encrypted · cert result on-chain
+              </p>
+            </div>
+            {isConnected && (
+              <button onClick={() => setShowCreatePayroll(true)} className="btn-primary flex items-center gap-2">
+                <Plus size={15} /> New Period
+              </button>
+            )}
+          </div>
+
+          {payrollIds.length === 0 ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card text-center py-20">
+              <div className="text-4xl mb-4">💼</div>
+              <p className="text-lg font-semibold text-slate-300 mb-2">No pay periods yet</p>
+              <p className="text-sm text-slate-500 mb-6">
+                Create a pay period — employer enrolls team, employees submit encrypted salaries,
+                contract verifies min wage + pay equity fully on ciphertext.
+              </p>
+              {isConnected ? (
+                <button onClick={() => setShowCreatePayroll(true)} className="btn-primary inline-flex items-center gap-2">
+                  <DollarSign size={15} /> Create First Period
+                </button>
+              ) : (
+                <p className="text-sm text-slate-600">Connect your wallet to get started.</p>
+              )}
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {payrollIds.map((id, i) => (
+                <PayrollCard key={id.toString()} periodId={id} index={i} />
+              ))}
+            </div>
+          )}
+        </section>
+
         {/* Confidential Payments */}
         {isConnected && address && (
           <section className="mt-16">
@@ -289,6 +399,18 @@ export default function Home() {
       {showSendPayment && <SendPaymentModal onClose={() => setShowSendPayment(false)} />}
       {showCreateRound && <CreateRoundModal onClose={() => setShowCreateRound(false)} onCreated={() => { refetchRounds(); setShowCreateRound(false); }} />}
       {showKYC && <KYCModal onClose={() => setShowKYC(false)} onVerified={() => refetchVerified()} />}
+      {showCreateProposal && (
+        <CreateProposalModal
+          onClose={() => setShowCreateProposal(false)}
+          onCreated={() => { refetchVotes(); setShowCreateProposal(false); }}
+        />
+      )}
+      {showCreatePayroll && (
+        <CreatePayrollModal
+          onClose={() => setShowCreatePayroll(false)}
+          onCreated={() => { refetchPayroll(); setShowCreatePayroll(false); }}
+        />
+      )}
     </div>
   );
 }
