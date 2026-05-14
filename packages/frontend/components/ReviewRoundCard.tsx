@@ -144,7 +144,7 @@ export function ReviewRoundCard({ roundId, index }: Props) {
   const [reviewTarget, setReviewTarget] = useState<{ proposalId: bigint; title: string } | null>(null);
 
   // Decrypt-for-view — reveal winner score client-side with a permit
-  const winnerIdForReveal = info ? (info[8] as bigint) : BigInt(0);
+  const winnerIdForReveal = info ? (info[8] as bigint) : 0n;
   const { data: scoreHandle } = useProposalScoreHandle(roundId, winnerIdForReveal, revealEnabled);
   const { decrypt, value: revealedScore, isDecrypting, error: revealError, reset: resetReveal } = useDecryptForView();
   const decryptTriggered = useRef(false);

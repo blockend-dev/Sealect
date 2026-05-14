@@ -8,7 +8,7 @@ import { arbitrumSepolia } from "../lib/wagmi";
 
 const CHAIN_ID = arbitrumSepolia.id;
 
-// ── Read hooks ─────────────────────────────────────────────────────────────────
+//  Read hooks ─
 
 export function useIsVerified(address: `0x${string}` | undefined) {
   return useReadContract({
@@ -48,7 +48,7 @@ export function useKycResultHandle(address: `0x${string}` | undefined) {
   });
 }
 
-// ── Two-step KYC flow ─────────────────────────────────────────────────────────
+//  Two-step KYC flow ─
 //
 // Step 1 — submitKYC: encrypts age + jurisdiction, computes FHE condition on-chain,
 //           stores encrypted result handle, grants ACL to user.
@@ -69,7 +69,7 @@ export function useSubmitKYC() {
       const { encAge, encJurisdiction } = await encryptKYC(age, jurisdiction);
 
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: IDENTITY_GATE_ADDRESS,
@@ -104,16 +104,16 @@ export function useClaimVerified() {
       setError(null);
       // Decrypt the KYC result stored on-chain using a CoFHE self permit
       const result = await decrypt(ctHash);
-      if (result !== BigInt(1)) throw new Error("KYC conditions not met — age < 18 or restricted jurisdiction.");
+      if (result !== 1n) throw new Error("KYC conditions not met — age < 18 or restricted jurisdiction.");
 
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: IDENTITY_GATE_ADDRESS,
         abi: IDENTITY_GATE_ABI,
         functionName: "claimVerified",
-        args: [BigInt(1)],
+        args: [1n],
         maxFeePerGas,
         maxPriorityFeePerGas: fees.maxPriorityFeePerGas ?? BigInt(1_500_000),
       });

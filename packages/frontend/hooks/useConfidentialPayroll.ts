@@ -8,7 +8,7 @@ import { arbitrumSepolia } from "../lib/wagmi";
 
 const CHAIN_ID = arbitrumSepolia.id;
 
-//  Read hooks 
+//  Read hooks ─
 
 export function usePayrollPeriodCount() {
   return useReadContract({

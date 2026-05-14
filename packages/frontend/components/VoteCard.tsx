@@ -14,7 +14,7 @@ import {
 import { EncryptionSteps } from "./EncryptionSteps";
 import clsx from "clsx";
 
-//  Countdown 
+// ── Countdown ─────────────────────────────────────────────────────────────────
 
 function useCountdown(deadline: number) {
   const [timeLeft, setTimeLeft] = useState("");
@@ -38,7 +38,7 @@ function useCountdown(deadline: number) {
   return { timeLeft, ended };
 }
 
-//  Main card 
+// ── Main card ─────────────────────────────────────────────────────────────────
 
 interface Props {
   proposalId: bigint;

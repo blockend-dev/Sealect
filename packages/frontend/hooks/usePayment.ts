@@ -28,7 +28,7 @@ export function usePaymentInfo(id: bigint) {
   });
 }
 
-// ── Send confidential payment ───────────────────────────────────────────────
+//  Send confidential payment 
 
 export function useSendPayment() {
   const { encryptBid, steps, isEncrypting, resetSteps } = useEncryptBid();
@@ -40,18 +40,20 @@ export function useSendPayment() {
     async (recipient: `0x${string}`, amountEth: string, reference: string) => {
       const amountWei = parseEther(amountEth);
 
-      // encrypt the amount client-side (takes 10-30s)
+      // Step 1: encrypt the amount client-side (takes 10-30s)
       const encrypted = await encryptBid(amountWei);
 
-      //  hash the reference string → bytes32
+      // Step 2: hash the reference string → bytes32
       const refHash = reference.trim()
         ? keccak256(toBytes(reference.trim()))
         : `0x${"00".repeat(32)}` as `0x${string}`;
 
+      // Step 3: fetch fresh fees — stale estimate after ZK proof causes
+      // "maxFeePerGas < baseFee" rejections in MetaMask.
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);  // +33% headroom
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;  // +33% headroom
 
-      // send with full InEuint128 struct + ETH value
+      // Step 4: send with full InEuint128 struct + ETH value
       await writeContractAsync({
         address: PAYMENT_ADDRESS,
         abi: PAYMENT_ABI,
@@ -76,7 +78,7 @@ export function useSendPayment() {
   return { sendPayment, steps, isEncrypting, isPending, isConfirming, isSuccess, reset };
 }
 
-// ── Claim payment ───────────────────────────────────────────────────────────
+//  Claim payment 
 
 export function useClaimPayment() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();

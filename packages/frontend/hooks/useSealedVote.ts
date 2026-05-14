@@ -8,7 +8,7 @@ import { arbitrumSepolia } from "../lib/wagmi";
 
 const CHAIN_ID = arbitrumSepolia.id;
 
-//  Read hooks ─
+//  Read hooks 
 
 export function useVoteProposalCount() {
   return useReadContract({
@@ -110,7 +110,7 @@ export function useCastBallot() {
   return { castBallot, steps, isEncrypting, isPending, isConfirming, isSuccess, reset };
 }
 
-//  Request on-chain decryption (after deadline) ─
+//  Request on-chain decryption (after deadline) 
 
 export function useRequestVoteDecryption() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
@@ -138,7 +138,7 @@ export function useRequestVoteDecryption() {
   return { requestDecryption, isPending, isConfirming, isSuccess };
 }
 
-//  Settle (reads on-chain decrypt result and finalizes) ─
+//  Settle (reads on-chain decrypt result and finalizes) 
 
 export function useSettleVote() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();

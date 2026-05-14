@@ -8,7 +8,7 @@ import { arbitrumSepolia } from "../lib/wagmi";
 
 const CHAIN_ID = arbitrumSepolia.id;
 
-// ── Read hooks ─────────────────────────────────────────────────────────────────
+//  Read hooks ─
 
 export function useRoundCount() {
   return useReadContract({
@@ -67,7 +67,7 @@ export function useHasReviewedProposal(
   });
 }
 
-// ── Create review round ────────────────────────────────────────────────────────
+//  Create review round 
 
 export function useCreateRound() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
@@ -84,7 +84,7 @@ export function useCreateRound() {
       wInnovation: number,
     ) => {
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: BLIND_REVIEW_ADDRESS,
@@ -102,7 +102,7 @@ export function useCreateRound() {
   return { createRound, isPending, isConfirming, isSuccess };
 }
 
-// ── Add proposal to a round ────────────────────────────────────────────────────
+//  Add proposal to a round 
 
 export function useAddProposal() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
@@ -112,7 +112,7 @@ export function useAddProposal() {
   const addProposal = useCallback(
     async (roundId: bigint, title: string, summary: string) => {
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: BLIND_REVIEW_ADDRESS,
@@ -130,7 +130,7 @@ export function useAddProposal() {
   return { addProposal, isPending, isConfirming, isSuccess };
 }
 
-// ── Submit encrypted review (impact, feasibility, innovation) ─────────────────
+//  Submit encrypted review (impact, feasibility, innovation) ─
 
 export function useSubmitReview() {
   const { encryptProposal, steps, isEncrypting, resetSteps } = useEncryptProposal();
@@ -153,7 +153,7 @@ export function useSubmitReview() {
         await encryptProposal(impact, feasibility, innovation);
 
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: BLIND_REVIEW_ADDRESS,
@@ -179,7 +179,7 @@ export function useSubmitReview() {
   return { submitReview, steps, isEncrypting, isPending, isConfirming, isSuccess, error, reset };
 }
 
-// ── Finalize round (organizer only, after deadline) ────────────────────────────
+//  Finalize round (organizer only, after deadline) 
 
 export function useFinalizeRound() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
@@ -189,7 +189,7 @@ export function useFinalizeRound() {
   const finalizeRound = useCallback(
     async (roundId: bigint, winnerProposalId: bigint) => {
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: BLIND_REVIEW_ADDRESS,

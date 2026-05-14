@@ -9,7 +9,7 @@ import { arbitrumSepolia } from "../lib/wagmi";
 
 const CHAIN_ID = arbitrumSepolia.id;
 
-// ── Read hooks ─────────────────────────────────────────────────────────────────
+//  Read hooks 
 
 export function useRequestInfo(id: bigint) {
   return useReadContract({
@@ -50,7 +50,7 @@ export function useEscrow(vendor: `0x${string}` | undefined, requestId: bigint) 
   });
 }
 
-// ── Submit encrypted 3-factor proposal ────────────────────────────────────────
+//  Submit encrypted 3-factor proposal 
 
 export function useSubmitProposal() {
   const { encryptProposal, steps, isEncrypting, resetSteps } = useEncryptProposal();
@@ -70,7 +70,7 @@ export function useSubmitProposal() {
       setError(null);
       const { encPrice, encQuality, encDelivery } = await encryptProposal(price, quality, delivery);
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: VENDOR_ADDRESS,
@@ -96,7 +96,7 @@ export function useSubmitProposal() {
   return { submitProposal, steps, isEncrypting, isPending, isConfirming, isSuccess, error, reset };
 }
 
-// ── Create decision request ────────────────────────────────────────────────────
+//  Create decision request 
 
 export function useCreateRequest() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
@@ -106,7 +106,7 @@ export function useCreateRequest() {
   const createRequest = useCallback(
     async (title: string, durationHours: number, depositEth: string, wPrice: number, wQuality: number, wDelivery: number) => {
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: VENDOR_ADDRESS,
@@ -124,7 +124,7 @@ export function useCreateRequest() {
   return { createRequest, isPending, isConfirming, isSuccess };
 }
 
-// ── Claim deposit (non-winning vendors) ───────────────────────────────────────
+//  Claim deposit (non-winning vendors) 
 
 export function useClaimDeposit() {
   const { writeContractAsync, data: txHash, isPending } = useWriteContract();
@@ -134,7 +134,7 @@ export function useClaimDeposit() {
   const claimDeposit = useCallback(
     async (requestId: bigint) => {
       const fees = await publicClient!.estimateFeesPerGas();
-      const maxFeePerGas = fees.maxFeePerGas! * BigInt(4) / BigInt(3);
+      const maxFeePerGas = fees.maxFeePerGas! * 4n / 3n;
 
       await writeContractAsync({
         address: VENDOR_ADDRESS,
