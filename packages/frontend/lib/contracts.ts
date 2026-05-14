@@ -1,8 +1,6 @@
 export const VENDOR_ADDRESS = (process.env.NEXT_PUBLIC_VENDOR_CONTRACT || "0x0000000000000000000000000000000000000000") as `0x${string}`;
 export const PAYMENT_ADDRESS = (process.env.NEXT_PUBLIC_PAYMENT_CONTRACT || "0x0000000000000000000000000000000000000000") as `0x${string}`;
 
-// InEuint128 struct — matches Solidity InEuint128 struct layout
-// The CoFHE co-processor on Arbitrum Sepolia supports up to uint128 (euint256 is disabled).
 export const INEUINT_ABI_TYPE = {
   type: "tuple",
   components: [
