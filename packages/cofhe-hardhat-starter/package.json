@@ -31,7 +31,7 @@
 		"//   -------------------": "",
 		"arb-sepolia:deploy-counter": "hardhat deploy-counter --network arb-sepolia",
 		"arb-sepolia:increment-counter": "hardhat increment-counter --network arb-sepolia",
-		"arb-sepolia:reset-counter": "hardhat reset-counter --network arb-sepolia",
+ 		"arb-sepolia:reset-counter": "hardhat reset-counter --network arb-sepolia",
 		"arb-sepolia:deploy-blind-review": "hardhat deploy-blind-review --network arb-sepolia",
 		"arb-sepolia:deploy-identity-gate": "hardhat deploy-identity-gate --network arb-sepolia"
 	},

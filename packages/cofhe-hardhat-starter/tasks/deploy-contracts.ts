@@ -95,3 +95,45 @@ task('deploy-identity-gate', 'Deploy the IdentityGate contract to the selected n
 
 	return IdentityGateAddress
 })
+
+task('deploy-sealed-vote', 'Deploy the SealedVote contract to the selected network').setAction(async (_, hre: HardhatRuntimeEnvironment) => {
+	const { ethers, network } = hre
+
+	console.log(`Deploying SealedVote to ${network.name}...`)
+
+	const [deployer] = await ethers.getSigners()
+	console.log(`Deploying with account: ${deployer.address}`)
+
+	const SealedVote = await ethers.getContractFactory('SealedVote')
+	const sealedVote = await SealedVote.deploy()
+	await sealedVote.waitForDeployment()
+
+	const address = await sealedVote.getAddress()
+	console.log(`SealedVote deployed to: ${address}`)
+	console.log(`\n=== Add to packages/frontend/.env.local ===`)
+	console.log(`NEXT_PUBLIC_VOTE_CONTRACT=${address}`)
+	saveDeployment(network.name, 'SealedVote', address)
+
+	return address
+})
+
+task('deploy-confidential-payroll', 'Deploy the ConfidentialPayroll contract to the selected network').setAction(async (_, hre: HardhatRuntimeEnvironment) => {
+	const { ethers, network } = hre
+
+	console.log(`Deploying ConfidentialPayroll to ${network.name}...`)
+
+	const [deployer] = await ethers.getSigners()
+	console.log(`Deploying with account: ${deployer.address}`)
+
+	const ConfidentialPayroll = await ethers.getContractFactory('ConfidentialPayroll')
+	const confidentialPayroll = await ConfidentialPayroll.deploy()
+	await confidentialPayroll.waitForDeployment()
+
+	const address = await confidentialPayroll.getAddress()
+	console.log(`ConfidentialPayroll deployed to: ${address}`)
+	console.log(`\n=== Add to packages/frontend/.env.local ===`)
+	console.log(`NEXT_PUBLIC_PAYROLL_CONTRACT=${address}`)
+	saveDeployment(network.name, 'ConfidentialPayroll', address)
+
+	return address
+})
