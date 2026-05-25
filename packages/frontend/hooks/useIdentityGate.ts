@@ -8,7 +8,7 @@ import { arbitrumSepolia } from "../lib/wagmi";
 
 const CHAIN_ID = arbitrumSepolia.id;
 
-//  Read hooks ─
+//  Read hooks 
 
 export function useIsVerified(address: `0x${string}` | undefined) {
   return useReadContract({
@@ -48,7 +48,7 @@ export function useKycResultHandle(address: `0x${string}` | undefined) {
   });
 }
 
-//  Two-step KYC flow ─
+//  Two-step KYC flow 
 //
 // Step 1 — submitKYC: encrypts age + jurisdiction, computes FHE condition on-chain,
 //           stores encrypted result handle, grants ACL to user.

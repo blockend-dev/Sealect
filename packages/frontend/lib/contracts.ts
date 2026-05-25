@@ -272,7 +272,7 @@ export const PAYMENT_ABI =[
     }
   ] as const;
 
-//  ConfidentialPayroll ABI 
+// ── ConfidentialPayroll ABI ────────────────────────────────────────────────────
 
 export const PAYROLL_ADDRESS = (process.env.NEXT_PUBLIC_PAYROLL_CONTRACT || "0x0000000000000000000000000000000000000000") as `0x${string}`;
 
@@ -812,7 +812,7 @@ export const PAYROLL_ABI =  [
   ] as const;
 
 
-//  VendorSelection ABI 
+// ── VendorSelection ABI ────────────────────────────────────────────────────────
 
 export const VENDOR_ABI = [
     {
@@ -1335,7 +1335,7 @@ export const VENDOR_ABI = [
     }
   ] as const
 
-//  BlindReview ABI 
+// ── BlindReview ABI ────────────────────────────────────────────────────────────
 
 export const BLIND_REVIEW_ADDRESS = (process.env.NEXT_PUBLIC_REVIEW_CONTRACT || "0x0000000000000000000000000000000000000000") as `0x${string}`;
 
@@ -1871,7 +1871,7 @@ export const BLIND_REVIEW_ABI =  [
     }
   ] as const;
 
-//  SealedVote ABI 
+// ── SealedVote ABI ────────────────────────────────────────────────────────────
 
 export const SEALED_VOTE_ADDRESS = (process.env.NEXT_PUBLIC_VOTE_CONTRACT || "0x0000000000000000000000000000000000000000") as `0x${string}`;
 
@@ -2235,7 +2235,7 @@ export const SEALED_VOTE_ABI = [
     }
   ] as const;
 
-//  IdentityGate ABI 
+// ── IdentityGate ABI ───────────────────────────────────────────────────────────
 
 export const IDENTITY_GATE_ADDRESS = (process.env.NEXT_PUBLIC_KYC_CONTRACT || "0x0000000000000000000000000000000000000000") as `0x${string}`;
 
