@@ -244,7 +244,7 @@ export function VoteCard({ proposalId, index }: Props) {
                 <p className="text-xs text-violet-300 font-medium">
                   Encrypting your ballot: <span className="font-bold">{voteChoice ? "YES" : "NO"}</span>
                 </p>
-                <EncryptionSteps steps={steps} />
+                <EncryptionSteps steps={steps} isEncrypting={isEncrypting} />
                 {(isCasting || isCastConfirming) && (
                   <div className="flex items-center gap-2 text-xs text-slate-400">
                     <Loader2 size={11} className="animate-spin" />
