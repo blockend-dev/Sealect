@@ -37,7 +37,7 @@ server.tool("vote_list_proposals", "List all governance proposals", {}, async ()
         .then(p => ({ id: i + 1, proposer: p[0], title: p[1], description: p[2], deadline: p[3], quorum: p[4], totalVoters: p[5], decryptRequested: p[6], settled: p[7], passed: p[8], revealedYes: p[9] }))
     )
   );
-  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), proposals }, null, 2) }] };
+  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), proposals }) }] };
 });
 
 server.tool("vote_create_proposal", "Create a new governance proposal",
@@ -83,7 +83,7 @@ server.tool("payroll_list_periods", "List all payroll periods", {}, async () => 
         .then(p => ({ id: i + 1, employer: p[0], name: p[1], minWage: p[2], employeeCount: p[3], submittedCount: p[4], groupZeroCount: p[5], groupOneCount: p[6], certificationRequested: p[7], certified: p[8], passed: p[9] }))
     )
   );
-  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), periods }, null, 2) }] };
+  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), periods }) }] };
 });
 
 server.tool("payroll_create_period", "Create a new payroll period",
@@ -137,7 +137,7 @@ server.tool("vendor_list_requests", "List all vendor selection requests", {}, as
         .then(r => ({ id: i + 1, requester: r[0], title: r[1], startTime: r[2], endTime: r[3], bestVendor: r[4], settled: r[5], depositWei: r[6], wPrice: r[7], wQuality: r[8], wDelivery: r[9] }))
     )
   );
-  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), requests }, null, 2) }] };
+  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), requests }) }] };
 });
 
 server.tool("vendor_create_request", "Create a vendor selection request",
@@ -183,7 +183,7 @@ server.tool("payment_list", "List all confidential payments", {}, async () => {
         .then(p => ({ id: i + 1, sender: p[0], recipient: p[1], escrowed: p[2], timestamp: p[3], claimed: p[4], refHash: p[5] }))
     )
   );
-  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), payments }, null, 2) }] };
+  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), payments }) }] };
 });
 
 server.tool("payment_send", "Send a confidential payment to a recipient",
@@ -221,7 +221,7 @@ server.tool("review_list_rounds", "List all blind review rounds", {}, async () =
         .then(r => ({ id: i + 1, organizer: r[0], title: r[1], description: r[2], deadline: r[3], wImpact: r[4], wFeasibility: r[5], wInnovation: r[6], proposalCount: r[7], winnerProposalId: r[8], finalized: r[9] }))
     )
   );
-  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), rounds }, null, 2) }] };
+  return { content: [{ type: "text" as const, text: stringify({ count: Number(count), rounds }) }] };
 });
 
 server.tool("review_create_round", "Create a new blind review round",
