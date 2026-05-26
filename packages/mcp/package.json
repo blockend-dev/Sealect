@@ -4,22 +4,44 @@
   "description": "Sealect FHE MCP server — AI agents calling all six Sealect contracts on Arbitrum Sepolia",
   "type": "module",
   "main": "src/index.ts",
+  "bin": {
+    "sealect-mcp": "./bin.mjs"
+  },
+  "files": [
+    "bin.mjs",
+    "src/",
+    "sdk/",
+    ".env.example"
+  ],
+  "keywords": [
+    "mcp",
+    "fhe",
+    "fhenix",
+    "cofhe",
+    "blockchain",
+    "privacy",
+    "ai-agent",
+    "model-context-protocol",
+    "arbitrum"
+  ],
+  "license": "MIT",
   "scripts": {
     "start": "node --import tsx/esm src/index.ts",
     "dev": "tsx src/index.ts",
+    "inspect": "mcp-inspector npm run dev",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@cofhe/sdk": "^0.5.1",
     "@modelcontextprotocol/sdk": "^1.10.0",
     "dotenv": "^16",
+    "tsx": "^4",
     "viem": "^2",
     "zod": "^3"
   },
   "devDependencies": {
-    "@modelcontextprotocol/inspector": "^0.21.2",
+    "@modelcontextprotocol/inspector": "^0.14.0",
     "@types/node": "^20",
-    "tsx": "^4",
     "typescript": "^5"
   }
 }

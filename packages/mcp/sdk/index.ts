@@ -27,7 +27,7 @@ async function write(abi: readonly unknown[], address: Hash, fn: string, args: u
   return { hash, status: receipt.status };
 }
 
-//  Vote ──
+// Vote 
 
 export async function createProposal(title: string, description: string, durationSeconds: number, quorum: number) {
   return write(VOTE_ABI, ADDRESSES.vote, "createProposal", [title, description, BigInt(durationSeconds), BigInt(quorum)]);
@@ -51,7 +51,7 @@ export async function getProposal(proposalId: number) {
   return { proposer: p[0] as Hash, title: p[1] as string, description: p[2] as string, deadline: p[3] as bigint, quorum: p[4] as bigint, totalVoters: p[5] as bigint, decryptRequested: p[6] as boolean, settled: p[7] as boolean, passed: p[8] as boolean, revealedYes: p[9] as bigint };
 }
 
-//  Payroll ──
+//  Payroll 
 
 export async function createPayrollPeriod(name: string, minWageBigInt: bigint) {
   return write(PAYROLL_ABI, ADDRESSES.payroll, "createPeriod", [name, minWageBigInt]);
@@ -89,7 +89,7 @@ export async function selectVendorWinner(id: number, winner: Hash) {
   return write(VENDOR_ABI, ADDRESSES.vendor, "selectVendor", [BigInt(id), winner]);
 }
 
-//  Payment ──
+//  Payment 
 
 export async function sendConfidentialPayment(recipient: Hash, amount: bigint, escrowWei: bigint, refHash: Hash) {
   const encAmount = await encryptUint128(amount);
