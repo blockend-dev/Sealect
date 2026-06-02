@@ -14,7 +14,7 @@ import {
 import { EncryptionSteps } from "./EncryptionSteps";
 import clsx from "clsx";
 
-// ── Countdown ─────────────────────────────────────────────────────────────────
+//  Countdown 
 
 function useCountdown(deadline: number) {
   const [timeLeft, setTimeLeft] = useState("");
@@ -38,7 +38,7 @@ function useCountdown(deadline: number) {
   return { timeLeft, ended };
 }
 
-// ── Main card ─────────────────────────────────────────────────────────────────
+//  Main card 
 
 interface Props {
   proposalId: bigint;
@@ -68,12 +68,13 @@ export function VoteCard({ proposalId, index }: Props) {
     }
   }, [castDone, refetch, refetchVoted, resetBallot]);
 
+  const deadline = info ? Number(info[3]) : 0;
+  const { timeLeft, ended } = useCountdown(deadline);
+
   if (!info) return <div className="glass-card h-52 shimmer" />;
 
   // getProposal returns: [proposer, title, description, deadline, quorum, totalVoters, decryptRequested, settled, passed, revealedYes]
-  const [proposer, title, description, deadline, quorum, totalVoters, decryptRequested, settled, passed, revealedYes] = info;
-
-  const { timeLeft, ended } = useCountdown(Number(deadline));
+  const [proposer, title, description, , quorum, totalVoters, decryptRequested, settled, passed, revealedYes] = info;
 
   const isActive  = !ended && !settled;
   const noCount   = Number(totalVoters) - Number(revealedYes);
